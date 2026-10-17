@@ -1,0 +1,19 @@
+### Listar todas
+GET http://localhost:3000/tarefas
+
+### Buscar uma
+GET http://localhost:3000/tarefas/1
+
+### Criar
+POST http://localhost:3000/tarefas
+
+### Criar sem título (deve dar erro)
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+
+{}
+Content-Type: application/json
+
+{
+  "titulo": "Estudar CRUD"
+}
