@@ -12,7 +12,7 @@ const tarefas = [
 let proximoId = 4;
 
 app.get("/", (req, res) => {
-  res.json({ mensagem: "API de tarefas funcionando! 🚀" });
+  res.json({ mensagem: "API de tarefas funcionando! ✅" });
 });
 
 app.get("/tarefas", (req, res) => {
@@ -47,6 +47,16 @@ app.put("/tarefas/:id", (req, res) => {
   }
   tarefas[indice] = { ...tarefas[indice], ...req.body, id };
   res.json(tarefas[indice]);
+});
+
+app.delete("/tarefas/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const indice = tarefas.findIndex((tarefa) => tarefa.id === id);
+  if (indice === -1) {
+    return res.status(404).json({ erro: "Tarefa não encontrada" });
+  }
+  tarefas.splice(indice, 1);
+  res.status(204).send();
 });
 
 app.listen(3000, () => {
