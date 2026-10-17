@@ -39,6 +39,16 @@ app.post("/tarefas", (req, res) => {
   res.status(201).json(novaTarefa);
 });
 
+app.put("/tarefas/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const indice = tarefas.findIndex((tarefa) => tarefa.id === id);
+  if (indice === -1) {
+    return res.status(404).json({ erro: "Tarefa não encontrada" });
+  }
+  tarefas[indice] = { ...tarefas[indice], ...req.body, id };
+  res.json(tarefas[indice]);
+});
+
 app.listen(3000, () => {
   console.log("Servidor rodando em http://localhost:3000/");
 });

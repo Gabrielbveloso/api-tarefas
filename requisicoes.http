@@ -6,14 +6,30 @@ GET http://localhost:3000/tarefas/1
 
 ### Criar
 POST http://localhost:3000/tarefas
-
-### Criar sem título (deve dar erro)
-POST http://localhost:3000/tarefas
-Content-Type: application/json
-
-{}
 Content-Type: application/json
 
 {
   "titulo": "Estudar CRUD"
+}
+
+### Criar sem título (deve dar 400)
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+
+{}
+
+### Atualizar
+PUT http://localhost:3000/tarefas/1
+Content-Type: application/json
+
+{
+  "concluida": true
+}
+
+### Atualizar uma que não existe (deve dar 404)
+PUT http://localhost:3000/tarefas/99
+Content-Type: application/json
+
+{
+  "concluida": true
 }
