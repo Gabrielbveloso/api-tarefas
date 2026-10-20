@@ -2,9 +2,9 @@
   "name": "api-tarefas",
   "version": "1.0.0",
   "description": "API REST de tarefas com Node e Express",
-  "main": "src/server.js",
+  "main": "src/server.ts",
   "scripts": {
-    "dev": "node --watch src/server.js"
+    "dev": "tsx watch src/server.ts"
   },
   "keywords": [],
   "author": "",

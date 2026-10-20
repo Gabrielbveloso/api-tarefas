@@ -1,4 +1,5 @@
 import express from "express";
+import { prisma } from "./lib/prisma";
 
 const app = express();
 app.use(express.json());
@@ -15,7 +16,8 @@ app.get("/", (req, res) => {
   res.json({ mensagem: "API de tarefas funcionando! ✅" });
 });
 
-app.get("/tarefas", (req, res) => {
+app.get("/tarefas", async (req, res) => {
+  const tarefas = await prisma.tarefa.findMany();
   res.json(tarefas);
 });
 
@@ -28,14 +30,12 @@ app.get("/tarefas/:id", (req, res) => {
   res.json(tarefa);
 });
 
-app.post("/tarefas", (req, res) => {
+app.post("/tarefas", async (req, res) => {
   const { titulo } = req.body;
   if (!titulo) {
     return res.status(400).json({ erro: "O título é obrigatório" });
   }
-  const novaTarefa = { id: proximoId, titulo, concluida: false };
-  proximoId++;
-  tarefas.push(novaTarefa);
+  const novaTarefa = await prisma.tarefa.create({ data: { titulo } });
   res.status(201).json(novaTarefa);
 });
 
