@@ -4,14 +4,6 @@ import { prisma } from "./lib/prisma";
 const app = express();
 app.use(express.json());
 
-const tarefas = [
-  { id: 1, titulo: "Estudar", concluida: false },
-  { id: 2, titulo: "Trabalhar", concluida: true },
-  { id: 3, titulo: "Ir para a natação", concluida: true },
-];
-
-let proximoId = 4;
-
 app.get("/", (req, res) => {
   res.json({ mensagem: "API de tarefas funcionando! ✅" });
 });
@@ -21,9 +13,9 @@ app.get("/tarefas", async (req, res) => {
   res.json(tarefas);
 });
 
-app.get("/tarefas/:id", (req, res) => {
+app.get("/tarefas/:id", async (req, res) => {
   const id = Number(req.params.id);
-  const tarefa = tarefas.find((tarefa) => tarefa.id === id);
+  const tarefa = await prisma.tarefa.findUnique({ where: { id } });
   if (!tarefa) {
     return res.status(404).json({ erro: "Tarefa não encontrada" });
   }
@@ -39,23 +31,27 @@ app.post("/tarefas", async (req, res) => {
   res.status(201).json(novaTarefa);
 });
 
-app.put("/tarefas/:id", (req, res) => {
+app.put("/tarefas/:id", async (req, res) => {
   const id = Number(req.params.id);
-  const indice = tarefas.findIndex((tarefa) => tarefa.id === id);
-  if (indice === -1) {
+  const tarefa = await prisma.tarefa.findUnique({ where: { id } });
+  if (!tarefa) {
     return res.status(404).json({ erro: "Tarefa não encontrada" });
   }
-  tarefas[indice] = { ...tarefas[indice], ...req.body, id };
-  res.json(tarefas[indice]);
+  const { titulo, concluida } = req.body;
+  const tarefaAtualizada = await prisma.tarefa.update({
+    where: { id },
+    data: { titulo, concluida },
+  });
+  res.json(tarefaAtualizada);
 });
 
-app.delete("/tarefas/:id", (req, res) => {
+app.delete("/tarefas/:id", async (req, res) => {
   const id = Number(req.params.id);
-  const indice = tarefas.findIndex((tarefa) => tarefa.id === id);
-  if (indice === -1) {
+  const tarefa = await prisma.tarefa.findUnique({ where: { id } });
+  if (!tarefa) {
     return res.status(404).json({ erro: "Tarefa não encontrada" });
   }
-  tarefas.splice(indice, 1);
+  await prisma.tarefa.delete({ where: { id } });
   res.status(204).send();
 });
 

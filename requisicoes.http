@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ### Apagar
-DELETE http://localhost:3000/tarefas/2
+DELETE http://localhost:3000/tarefas/1
 
 ### Apagar uma que não existe (deve dar 404)
 DELETE http://localhost:3000/tarefas/99
