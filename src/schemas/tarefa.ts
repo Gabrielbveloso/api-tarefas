@@ -15,7 +15,7 @@ export const criarTarefaSchema = z.object({
 });
 
 export const atualizarTarefaSchema = z.object({
-  titulo: tituloSchema,
+  titulo: tituloSchema.optional(),
   concluida: z
     .boolean({ error: "A conclusão deve ser verdadeiro ou falso" })
     .optional(),
