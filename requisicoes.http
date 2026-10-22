@@ -39,3 +39,19 @@ DELETE http://localhost:3000/tarefas/1
 
 ### Apagar uma que não existe (deve dar 404)
 DELETE http://localhost:3000/tarefas/99
+
+### Criar com título que não é texto (deve dar 400)
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+
+{
+  "titulo": 123
+}
+
+### Criar com título só de espaços (deve dar 400)
+POST http://localhost:3000/tarefas
+Content-Type: application/json
+
+{
+  "titulo": "     "
+}

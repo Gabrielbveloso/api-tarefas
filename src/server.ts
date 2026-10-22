@@ -1,5 +1,7 @@
 import express from "express";
 import { prisma } from "./lib/prisma";
+import { criarTarefaSchema } from "./schemas/tarefa";
+import { string } from "zod";
 
 const app = express();
 app.use(express.json());
@@ -23,10 +25,11 @@ app.get("/tarefas/:id", async (req, res) => {
 });
 
 app.post("/tarefas", async (req, res) => {
-  const { titulo } = req.body;
-  if (!titulo) {
-    return res.status(400).json({ erro: "O título é obrigatório" });
+  const resultado = criarTarefaSchema.safeParse(req.body);
+  if (!resultado.success) {
+    return res.status(400).json({ erro: resultado.error.issues[0].message });
   }
+  const { titulo } = resultado.data;
   const novaTarefa = await prisma.tarefa.create({ data: { titulo } });
   res.status(201).json(novaTarefa);
 });
